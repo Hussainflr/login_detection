@@ -1,26 +1,5 @@
-# import gradio as gr
-# def greet(name, intensity):
-#     return "Hello, " + name + "!" * int(intensity)
-
-# demo = gr.Interface(
-#     fn=greet,
-#     inputs=["text", "slider"],
-#     outputs=["text"],
-# )
-
-# demo.launch(share=True)
-
-
-import requests
 from PIL import Image
-from torchvision import transforms
-import torch
 from ultralytics import YOLO
-# model = torch.hub.load('pytorch/vision:v0.6.0', 'resnet18', pretrained=True).eval()
-# # Download human-readable labels for ImageNet.
-# response = requests.get("https://git.io/JJkYN")
-# labels = response.text.split("\n")
-
 from aliyunsdkcore import client
 from aliyunsdkgreen.request.v20180509 import ImageSyncScanRequest
 from aliyunsdkgreenextension.request.extension import HttpContentHelper
@@ -30,16 +9,17 @@ from aliyunsdkcore import client
 from aliyunsdkgreen.request.v20180509 import ImageSyncScanRequest
 import json
 import uuid
-import oss2
 from oss2 import Bucket, Auth
 import re 
-import os
 from PIL import Image
 import io
-
 import cv2
 import numpy as np
 from skimage.metrics import structural_similarity as ssim
+from config import ALIBABA_CLOUD_ACCESS_KEY_ID, ALIBABA_CLOUD_ACCESS_KEY_SECRET,\
+  ENDPOINT, BUCKET_NAME, MODEL_PATH, OUTPUT_VIDEO_PATH, SIMILARITY_THRESHOLD, EMAIL_REG, CODEC_FORMAT
+
+
 
 def compare_orb(frame1, frame2):
     orb = cv2.ORB_create()
@@ -74,8 +54,8 @@ def remove_similar_frames(input_video, similarity_threshold=0.7):
     height = int(input_video.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
     # Create VideoWriter object to output the processed video
-    fourcc = cv2.VideoWriter_fourcc(*'XVID')
-    out_video_path = 'output_video.mov'
+    fourcc = cv2.VideoWriter_fourcc(*CODEC_FORMAT)
+    out_video_path = OUTPUT_VIDEO_PATH
     out = cv2.VideoWriter(out_video_path, fourcc, frame_rate, (width, height))
 
     ret, prev_frame = input_video.read()
@@ -102,7 +82,7 @@ def remove_similar_frames(input_video, similarity_threshold=0.7):
     out.release()
 
     # Return the processed video object
-    processed_video = cv2.VideoCapture('output_video.mov')
+    processed_video = cv2.VideoCapture(OUTPUT_VIDEO_PATH)
     print(">>>>>>>>>>  ", processed_video)
     return processed_video, out_video_path
 
@@ -118,8 +98,8 @@ def format_data(totalframes, lframes, dframes, nlframes):
   return formatted_data
 
 
-def extract_login_frames(input_video, similarity_threshold=0.7):
-  model = YOLO('runs/classify/train17/weights/best.pt')
+def extract_login_frames(input_video, similarity_threshold=SIMILARITY_THRESHOLD):
+  model = YOLO(MODEL_PATH)
   input_video = cv2.VideoCapture(input_video)
   frame_rate = input_video.get(cv2.CAP_PROP_FPS)
   width = int(input_video.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -127,8 +107,8 @@ def extract_login_frames(input_video, similarity_threshold=0.7):
   totalframes = input_video.get(cv2.CAP_PROP_FRAME_COUNT)
 
   # Create VideoWriter object to output the processed video
-  fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-  out_video_path = 'output_video.mov'
+  fourcc = cv2.VideoWriter_fourcc(*CODEC_FORMAT)
+  out_video_path = OUTPUT_VIDEO_PATH
   out = cv2.VideoWriter(out_video_path, fourcc, frame_rate, (width, height))
   login_probs = []
   nonlogin_probs = []
@@ -176,18 +156,13 @@ def extract_login_frames(input_video, similarity_threshold=0.7):
 
 
 def getemails(text:str):
-  emails = re.findall(r'[\w\.-]+@[\w\.-]+(?:\.[\w]+)+', text)
+  emails = re.findall(EMAIL_REG, text)
   return emails
 
 
 
 def uploadimg(img):
   new_file_name = f"{uuid.uuid4()}.png"
-  # 阿里云主账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM账号进行API访问或日常运维，请登录 https://ram.console.aliyun.com 创建RAM账号。
-  access_key_id = ''
-  access_key_secret = ''
-  bucket_name = 'hussain'
-  endpoint = 'oss-cn-beijing.aliyuncs.com' # 根据Bucket所在地域填写，例如'oss-cn-hangzhou.aliyuncs.com'
   if isinstance(img, np.ndarray):
     img = Image.fromarray(img)
 
@@ -196,8 +171,8 @@ def uploadimg(img):
   img.save(buffer, format='png')  # You can change format to PNG, etc.
   buffer.seek(0)  # Rewind the buffer to the beginning
   # 创建Bucket实例
-  auth = oss2.Auth(access_key_id, access_key_secret)
-  bucket = oss2.Bucket(auth, endpoint, bucket_name)
+  auth = Auth(ALIBABA_CLOUD_ACCESS_KEY_ID, ALIBABA_CLOUD_ACCESS_KEY_SECRET)
+  bucket = Bucket(auth, ENDPOINT, BUCKET_NAME)
   # 上传图片
   object_key = 'temp/'+new_file_name  # 图片在Bucket中的存储路径和文件名
   bucket.put_object(object_key, buffer)
@@ -206,7 +181,7 @@ def uploadimg(img):
   # 获取图片URL
   if bucket.PUBLIC_ACCESS_BLOCK:
       # 如果Bucket是公共读，则可以直接构造URL
-      url = f'https://{bucket_name}.{endpoint}/{object_key}'
+      url = f'https://{BUCKET_NAME}.{ENDPOINT}/{object_key}'
   else:
       # 如果Bucket不是公共读，则需要生成一个签名的URL
       expires = 3600  # URL有效期，单位为秒
@@ -232,7 +207,7 @@ def upload_video_frames(input_video):
     
 
 def ocr(im_url):
-    clt = client.AcsClient("", "")
+    clt = client.AcsClient(ALIBABA_CLOUD_ACCESS_KEY_ID, ALIBABA_CLOUD_ACCESS_KEY_SECRET)
     #coding=utf-8
     # The following code provides an example on how to call the ImageSyncScanRequest operation to submit synchronous OCR tasks and obtain the moderation results in real time. 
 
