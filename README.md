@@ -6,11 +6,11 @@
 
 Welcome to the **[Email Detection From Videos]**, this app provides a powerful video processing pipeline that first uses a deep learning model to detect and extract login and non-login frames. Once the key frames are identified, the app applies image processing techniques to remove duplicate frames, optimizing the video data. Next, OCR is utilized to extract all text from the frames, enabling further analysis. To wrap up the process, an email regular expression (regex) is applied to identify and extract potential email addresses from the extracted text, making this app ideal for analyzing and extracting actionable data from videos..
 
-## Demo
+## Demo 
 
 
-Try it out on video [![Hugging Face](https://huggingface.co/front/assets/huggingface_logo.svg)](https://huggingface.co/spaces/Hussain5/Email-Detection-From-Videos).
-Try it out on images [![Hugging Face](https://huggingface.co/front/assets/huggingface_logo.svg)](https://huggingface.co/spaces/Hussain5/Email-Detection-From-Images).
+[Try it out on video](https://huggingface.co/spaces/Hussain5/Email-Detection-From-Videos) [![Hugging Face](https://huggingface.co/front/assets/huggingface_logo.svg =20x20)](https://huggingface.co/spaces/Hussain5/Email-Detection-From-Videos).
+[Try it out on images] (https://huggingface.co/spaces/Hussain5/Email-Detection-From-Images) [![Hugging Face](https://huggingface.co/front/assets/huggingface_logo.svg =20x20)](https://huggingface.co/spaces/Hussain5/Email-Detection-From-Images).
 
 ---
 
