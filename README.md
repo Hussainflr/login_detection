@@ -66,6 +66,7 @@ credentials:
 api:
   ENDPOINT: oss-cn-beijing.aliyuncs.com
   BUCKET_NAME: "bucketname"
+```
 
 ## Usage
 
