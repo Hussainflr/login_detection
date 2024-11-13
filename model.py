@@ -1,9 +1,11 @@
 from ultralytics import YOLO
 
-# Load a model
-model = YOLO("yolo11n-cls.yaml")  # build a new model from YAML
-model = YOLO("yolo11n-cls.pt")  # load a pretrained model (recommended for training)
-model = YOLO("yolo11n-cls.yaml").load("yolo11n-cls.pt")  # build from YAML and transfer weights
+from config import  MODELS
 
-# Train the model
-results = model.train(data="./data", epochs=100, imgsz=64)
+
+def getmodel(modelname):
+  model = None
+  if modelname in ["MODEL1", "MODEL2"]:
+    model =  YOLO(MODELS[modelname])
+  return model
+   

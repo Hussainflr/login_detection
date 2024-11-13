@@ -1,13 +1,14 @@
 credentials:
-  ALIBABA_CLOUD_ACCESS_KEY_ID: LTAI5tE1rynpnVmyaUhkb5BB
-  ALIBABA_CLOUD_ACCESS_KEY_SECRET: xlXLOddRWuTS4Qm6iGgyKA5NplksIQ
+  ALIBABA_CLOUD_ACCESS_KEY_ID: "add ALIBABA_CLOUD_ACCESS_KEY_ID"
+  ALIBABA_CLOUD_ACCESS_KEY_SECRET: "add ALIBABA_CLOUD_ACCESS_KEY_SECRET here"
 
 api:
   ENDPOINT: oss-cn-beijing.aliyuncs.com
   BUCKET_NAME: hussain
 
-model:
-  MODEL_PATH: runs/classify/train17/weights/best.pt
+models:
+  MODEL1: weights/model1.pt
+  MODEL2: weights/model2.pt
 
 video:
   OUTPUT_VIDEO_PATH: output_video.mov
@@ -15,4 +16,4 @@ video:
   CODEC_FORMAT: 'MP4V'
 
 email:
-  EMAIL_REG: r'[\w\.-]+@[\w\.-]+(?:\.[\w]+)+'
+  EMAIL_REG: r'[\\w\\.-]+@[\\w\\.-]+(?:\\.[\\w]+)+'
