@@ -1,10 +1,10 @@
 
-# Gradio App: [Email Detection From Videos]
+# Email Detection From Videos
 
 ![Gradio](https://img.shields.io/badge/Gradio-App-blue)  
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-Welcome to the **[Email Detection From Videos]**, this app provides a powerful video processing pipeline that first uses a deep learning model to detect and extract login and non-login frames. Once the key frames are identified, the app applies image processing techniques to remove duplicate frames, optimizing the video data. Next, OCR is utilized to extract all text from the frames, enabling further analysis. To wrap up the process, an email regular expression (regex) is applied to identify and extract potential email addresses from the extracted text, making this app ideal for analyzing and extracting actionable data from videos..
+Welcome to the **Email Detection From Videos**, this app provides a powerful video processing pipeline that first uses a deep learning model to detect and extract login and non-login frames. Once the key frames are identified, the app applies image processing techniques to remove duplicate frames, optimizing the video data. Next, OCR is utilized to extract all text from the frames, enabling further analysis. To wrap up the process, an email regular expression (regex) is applied to identify and extract potential email addresses from the extracted text, making this app ideal for analyzing and extracting actionable data from videos..
 
 ## Demo 
 
