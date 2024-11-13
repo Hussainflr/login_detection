@@ -8,8 +8,10 @@ Welcome to the **[Email Detection From Videos]**, this app provides a powerful v
 
 ## Demo 
 
-[![Hugging Face](https://huggingface.co/front/assets/huggingface_logo.svg)]
+![Hugging Face](https://huggingface.co/front/assets/huggingface_logo.svg)
+
 [Try it out on video](https://huggingface.co/spaces/Hussain5/Email-Detection-From-Videos).
+
 [Try it out on images](https://huggingface.co/spaces/Hussain5/Email-Detection-From-Images).
 
 ---
