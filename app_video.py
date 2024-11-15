@@ -7,17 +7,17 @@ import gradio as gr
 def predict(video, modelname):
   processed_video, video_path, confidences, frames_count = extract_login_frames(video, modelname)
   img_urls = upload_video_frames(processed_video)
-  emails = ["No Emails Found"]
+  emails = []
   text = ""
   for img_url in img_urls:
       try:
         text = ocr(img_url)
-        emails = getemails(text=text)
+        emails += getemails(text=text)
       except:
-         emails = ["OCR Failed Please Try Again."]
+         emails += ["OCR Failed Please Try Again."]
   if not emails:
      emails = ["No Emails Found"]
-  
+  emails = list(set(emails))
   return confidences, emails,frames_count, video_path
 
 
