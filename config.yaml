@@ -1,6 +1,6 @@
 credentials:
-  ALIBABA_CLOUD_ACCESS_KEY_ID: "add ALIBABA_CLOUD_ACCESS_KEY_ID"
-  ALIBABA_CLOUD_ACCESS_KEY_SECRET: "add ALIBABA_CLOUD_ACCESS_KEY_SECRET here"
+  ALIBABA_CLOUD_ACCESS_KEY_ID: 
+  ALIBABA_CLOUD_ACCESS_KEY_SECRET:
 
 api:
   ENDPOINT: oss-cn-beijing.aliyuncs.com
@@ -10,10 +10,12 @@ models:
   MODEL1: weights/model1.pt
   MODEL2: weights/model2.pt
 
+
 video:
   OUTPUT_VIDEO_PATH: output_video.mov
   SIMILARITY_THRESHOLD: 0.7
   CODEC_FORMAT: 'MP4V'
 
+CONFIDENCE: 0.6
 email:
   EMAIL_REG: r'[\\w\\.-]+@[\\w\\.-]+(?:\\.[\\w]+)+'
