@@ -1,9 +1,8 @@
-import cv2
 from skimage.metrics import structural_similarity as ssim
 from config import OUTPUT_VIDEO_PATH, CODEC_FORMAT
 import cv2
 from skimage.metrics import structural_similarity as ssim
-from config import  MODELS, OUTPUT_VIDEO_PATH, SIMILARITY_THRESHOLD, CODEC_FORMAT
+from config import  MODELS, OUTPUT_VIDEO_PATH, SIMILARITY_THRESHOLD, CODEC_FORMAT, CONFIDENCE
 from utility import  format_data
 from model import getmodel
 
@@ -109,7 +108,7 @@ def extract_login_frames(input_video, modelname, similarity_threshold=SIMILARITY
     probs = results[0].probs.data.numpy()
     login_probs.append(probs[0])
     nonlogin_probs.append(probs[1])
-    if probs[0] > 0.8:
+    if probs[0] > CONFIDENCE:
       # Calculate SSIM between current frame and previous frame
       similarity = calculate_ssim(prev_frame, current_frame)
       # similarity = compare_orb(prev_frame, current_frame)

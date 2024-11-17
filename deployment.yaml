@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: login-detection
+  labels:
+    app: gradio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gradio
+  template:
+    metadata:
+      labels:
+        app: gradio
+    spec:
+      containers:
+      - name: login-detection
+        image: ghcr.io/hussainflr/login_detection:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 7860
+        resources:
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+        env:
+        - name: ALIBABA_CLOUD_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: gradio-secrets2
+              key: api-id
+        - name: ALIBABA_CLOUD_ACCESS_KEY_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: gradio-secrets2
+              key: api-sec
+        # Optional: Add readiness and liveness probes for better monitoring
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 7860
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 7860
+          initialDelaySeconds: 30
+          periodSeconds: 10
